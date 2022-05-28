@@ -37,16 +37,11 @@
           </b-card>
         </b-col>
         <b-col cols="12" sm="4">
-          <b-card title="Card title" sub-title="Card subtitle">
-            <b-card-text>
-              Some quick example text to build on the <em>card title</em> and make up the bulk of the card's
-              content.
-            </b-card-text>
-
-            <b-card-text>A second paragraph of text in the card.</b-card-text>
-
-            <a href="#" class="card-link">Card link</a>
-            <b-link href="#" class="card-link">Another link</b-link>
+          <b-card>
+            <b-card-title class="text-center">Prediction history</b-card-title>
+            <div class="mt-2 mb-2">
+              <PredictionHistory></PredictionHistory>
+            </div>
           </b-card>
         </b-col>
       </b-row>
@@ -55,11 +50,13 @@
 </template>
 
 <script>
-import ResultPredict from '@/components/resultPredict.vue'
+import ResultPredict from '@/components/resultPredict.vue';
+import PredictionHistory from '@/components/predictionHistory.vue';
 export default {
   name: 'HomeView',
   components: {
-    ResultPredict
+    ResultPredict,
+    PredictionHistory
   },
   data() {
     return {
