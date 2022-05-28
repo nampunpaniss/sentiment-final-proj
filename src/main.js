@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import axios from "axios"
 
 Vue.config.productionTip = false
 import { BootstrapVue, IconsPlugin, BVToastPlugin } from 'bootstrap-vue'
@@ -18,6 +19,7 @@ Vue.use(BVToastPlugin);
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
 Vue.component('apexChart', VueApexCharts)
+axios.defaults.baseURL = 'http://localhost:5000';
 
 new Vue({
   router,
