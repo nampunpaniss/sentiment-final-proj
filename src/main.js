@@ -16,6 +16,7 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 Vue.use(BVToastPlugin);
+Vue.use(require('vue-moment'));
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
 Vue.component('apexChart', VueApexCharts)
