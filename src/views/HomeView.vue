@@ -32,7 +32,7 @@
               <b-button :disabled="predicting" variant="success" style="width:100px;" @click="predict"><b-spinner small v-show="predicting"></b-spinner> Predict</b-button>
             </div>
             <div class="mb-2">
-              <ResultPredict :show="clickedButton" :loading="loadingResult"></ResultPredict>
+              <ResultPredict :resultPredict="resultPredict" :loading="loadingResult"></ResultPredict>
             </div>
           </b-card>
         </b-col>
@@ -52,6 +52,8 @@
 <script>
 import ResultPredict from '@/components/resultPredict.vue';
 import PredictionHistory from '@/components/predictionHistory.vue';
+import { actionTypes, getterTypes } from "@/store/types";
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'HomeView',
   components: {
@@ -64,10 +66,12 @@ export default {
       predicting: false,
       stateAfterPredict: false,
       clickedButton: true,
-      loadingResult: false
+      loadingResult: false,
+      resultPredict: null
     }
   },
   computed: {
+    ...mapGetters([getterTypes.RESULT_PREDICTION]),
     state() {
       if(this.textPost){
         return this.textPost.length >= 10 && this.textPost.length <= 5000
@@ -88,18 +92,22 @@ export default {
     }
   },
   methods: {
+    ...mapActions([actionTypes.PREDICT_POST]),
     resetText(){
       this.textPost = null
+      this.resultPredict = null
     },
     predict(){
       this.predicting = true
       this.loadingResult = true
-      this.clickedButton = false
       if(this.state){
-        setTimeout(() => {
-          this.predicting = false
-          this.loadingResult = false
-        }, 3000);
+        this.predictPost(this.textPost).then(()=>{
+          this.resultPredict = this.resultPrediction
+          setTimeout(() => {
+            this.predicting = false
+            this.loadingResult = false
+          }, 2000);
+        });
       } else{
         this.predicting = false
         this.loadingResult = false
@@ -109,8 +117,6 @@ export default {
           autoHideDelay: 5000,
           appendToast: false
         })
-
-        // this.$bvToast.toast("error", { variant: 'danger' })
       }
     }
   }

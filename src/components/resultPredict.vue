@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-card title="Result" :class="{'d-none':show}">
+        <b-card title="Result" :class="{'d-none':(resultPredict == null || resultPredict == {} ? true : false)}">
             <div v-if="loading" class="d-flex align-items-center justify-content-center text-primary my-2" style="height: 850px;flex-direction:column;">
                 <b-spinner style="width: 6rem; height: 6rem;" class="mb-6" variant="primary"></b-spinner>
                 <strong style="font-size:x-large;">Loading...</strong>
@@ -8,33 +8,39 @@
             <b-row v-else class="mt-2 mb-2">
                 <b-col cols="12">
                     <b-row class="m-2">
-                        <b-col cols="12" class="mt-2 mb-2">
+                        <b-col v-if="resultPredict" cols="12" class="mt-2 mb-2">
                             <b-card>
                                 <div class="d-flex align-items-center">
                                     <h5 class="ml-1">Emotions:</h5>
                                     <div class="d-flex text-center">
                                         <div class="block">
-                                            <p style="margin:0.5rem !important" class="text-in-block">{{ emotionText }}</p>
+                                            <p style="margin:0.5rem !important" class="text-in-block">{{ resultPredict.purport }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="d-flex text-center mb-4 justify-content-center">
-                                    <div id="first-class" :class="['block-emotion',result[0]]">
-                                        <img :src="'../reaction-icon/'+result[0]+'.svg'" :alt="result[0]" style="width: 100px;height: 100px;margin: 0.5rem;">
-                                        <p class="text-in-block">{{ result[0] }}</p>
+                                <div v-if="resultPredict.pre != 'unpredict'" class="d-flex text-center mb-4 justify-content-center">
+                                    <div id="first-class" :class="['block-emotion',resultPredict.pre]">
+                                        <img :src="'../reaction-icon/'+resultPredict.pre+'.svg'" :alt="resultPredict.pre" style="width: 100px;height: 100px;margin: 0.5rem;">
+                                        <p class="text-in-block">{{ resultPredict.pre }}</p>
                                     </div>
-                                    <div id="second-class" :class="['block-emotion',result[1]]">
-                                        <img :src="'../reaction-icon/'+result[1]+'.svg'" :alt="result[1]" style="width: 70px;height: 70px;margin: 0.5rem;">
-                                        <p class="text-in-block">{{ result[1] }}</p>
+                                    <div id="second-class" :class="['block-emotion',resultPredict.prob]">
+                                        <img :src="'../reaction-icon/'+resultPredict.prob+'.svg'" :alt="resultPredict.prob" style="width: 70px;height: 70px;margin: 0.5rem;">
+                                        <p class="text-in-block">{{ resultPredict.prob }}</p>
+                                    </div>
+                                </div>
+                                <div v-else class="d-flex text-center mb-4 justify-content-center">
+                                    <div id="unpredict-class" :class="['block-emotion',resultPredict.pre]">
+                                        <img :src="'../reaction-icon/'+resultPredict.pre+'.png'" :alt="resultPredict.pre" style="width: 100px;height: 100px;margin: 0.5rem;">
+                                        <p class="text-in-block">{{ resultPredict.pre }}</p>
                                     </div>
                                 </div>
                                 <!-- <h5 class="mb-2">The meaning of the predicted mood</h5>
                                 <hr> -->
                             </b-card>
                         </b-col>
-                        <b-col cols="12">
-                            <apexChart type="bar" :options="options" :series="series"></apexChart>
+                        <b-col cols="12" v-if="resultPredict">
+                            <apexChart type="bar" :options="options" :series="[{name: 'value',data: getComputeScore}],"></apexChart>
                         </b-col>
                     </b-row>
                 </b-col>
@@ -46,7 +52,7 @@
 <script>
 export default {
     props: [
-        'show',
+        'resultPredict',
         'loading'
     ],
     name: "resultPredict",
@@ -83,13 +89,21 @@ export default {
                         text: 'Prediction (%)'
                     }
                 },
-            },
-            series: [{
-                name: 'series-1',
-                data: [91, 70, 49, 60, 50, 45]
-            }],
-            result: ['like','love'],
-            emotionText: 'Generally wholesome post'
+            }
+        }
+    },
+    computed: {
+        getComputeScore() {
+            if(this.resultPredict){
+                return [this.computeScore(this.resultPredict.like),this.computeScore(this.resultPredict.love),this.computeScore(this.resultPredict.haha),this.computeScore(this.resultPredict.wow),this.computeScore(this.resultPredict.sad),this.computeScore(this.resultPredict.angry)]
+            }
+            return []
+        }
+    },
+    methods: {
+        computeScore(score){
+            var totalScore = this.resultPredict.like + this.resultPredict.love + this.resultPredict.haha + this.resultPredict.wow + this.resultPredict.sad + this.resultPredict.angry
+            return ((score / totalScore)*100).toFixed(2)
         }
     }
 }

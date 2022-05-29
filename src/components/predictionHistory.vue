@@ -2,17 +2,17 @@
   <div>
       <div class="block mt-2 mb-2" v-for="(item,index) in listShowData" :key="index">
         <div class="m-3">
-            <h6>Emotion: {{ item.emotion }}</h6>
-            <p>{{ item.text }}</p>
+            <h6 style="font-weight: bolder;">Emotion: {{ item.purport }}</h6>
+            <p style="text-align: justify;">{{ item.text | truncateText(200, '...') }}</p>
             <div class="text-end">
-                <p class="see-more" @click="goToDetail(item)">See more</p>
+                <p class="see-more" @click="goToDetail(item.id)">See more</p>
             </div>
         </div>
       </div>
       <b-pagination 
         v-model="currentPage" 
         pills 
-        :total-rows="listItems.length"
+        :total-rows="historyPredictions.length"
         :per-page="perPage"
         class="justify-content-center mt-2 mb-1"
       ></b-pagination>
@@ -24,6 +24,8 @@
 
 <script>
 import DetailPrediction from './detailPrediction.vue'
+import { actionTypes, getterTypes } from "@/store/types"
+import { mapGetters, mapActions } from 'vuex'
 export default {
     name: "PredictionHistory",
     components: {
@@ -32,80 +34,35 @@ export default {
     data() {
         return {
             currentPage: 1,
-            perPage: 9,
-            clickedPost: null,
-            listItems: [
-                {
-                    emotion: 'Generally wholesome post 0',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 1',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 2',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 3',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 4',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 5',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 6',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 7',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 8',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 9',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 10',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 11',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 12',
-                    text: 'content of post...',
-                },
-                {
-                    emotion: 'Generally wholesome post 13',
-                    text: 'content of post...',
-                },
-            ],
+            perPage: 6,
+            clickedPost: null
         }
     },
+    created() {
+        this.fetchHistoryPredictions()
+    },
+    filters: {
+        truncateText: function (text, length, clamp) {
+            if (text) {
+                return text.length > length ? text.slice(0, length) + clamp || '...' : text;
+            }
+            return text
+        },
+    },
     computed: {
+        ...mapGetters([getterTypes.HISTORY_PREDICTIONS]),
         listShowData(){
             if(this.currentPage == 1){
-                return this.listItems.slice(0,this.perPage)
+                return this.historyPredictions.slice(0,this.perPage)
             } else {
                 let start = this.perPage * (this.currentPage - 1)
                 let end = this.perPage * this.currentPage
-                return this.listItems.slice(start,end)
+                return this.historyPredictions.slice(start,end)
             }
         }
     },
     methods: {
+        ...mapActions([actionTypes.FETCH_HISTORY_PREDICTIONS]),
         goToDetail(post) {
             this.clickedPost = post
             this.$bvModal.show('detail-prediction')
