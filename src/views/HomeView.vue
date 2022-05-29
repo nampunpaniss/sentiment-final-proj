@@ -8,7 +8,7 @@
       </b-col>
       <b-row>
         <b-col cols="12" sm="8">
-          <b-card>
+          <b-card style="min-height: 1309px;">
             <div class="mt-2 mb-2">
               <b-form-group
                 id="text-area-field"
@@ -28,16 +28,16 @@
               </b-form-group>
             </div>
             <div class="mt-2 mb-5 d-flex justify-content-end">
-              <b-button :disabled="predicting" variant="warning" style="margin-right: 0.5rem;" @click="resetText">Reset</b-button>
+              <b-button :disabled="predicting" variant="warning" style="width:100px;margin-right: 0.5rem;" @click="resetText">Reset</b-button>
               <b-button :disabled="predicting" variant="success" style="width:100px;" @click="predict"><b-spinner small v-show="predicting"></b-spinner> Predict</b-button>
             </div>
             <div class="mb-2">
-              <ResultPredict></ResultPredict>
+              <ResultPredict :show="clickedButton" :loading="loadingResult"></ResultPredict>
             </div>
           </b-card>
         </b-col>
         <b-col cols="12" sm="4">
-          <b-card>
+          <b-card style="min-height: 1309px;">
             <b-card-title class="text-center">Prediction history</b-card-title>
             <div class="mt-2 mb-2">
               <PredictionHistory></PredictionHistory>
@@ -62,7 +62,9 @@ export default {
     return {
       textPost: null,
       predicting: false,
-      stateAfterPredict: false
+      stateAfterPredict: false,
+      clickedButton: true,
+      loadingResult: false
     }
   },
   computed: {
@@ -91,12 +93,16 @@ export default {
     },
     predict(){
       this.predicting = true
+      this.loadingResult = true
+      this.clickedButton = false
       if(this.state){
         setTimeout(() => {
           this.predicting = false
+          this.loadingResult = false
         }, 3000);
       } else{
         this.predicting = false
+        this.loadingResult = false
         this.$bvToast.toast(`error`, {
           variant: 'danger',
           title: 'error',

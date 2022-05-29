@@ -1,26 +1,36 @@
 <template>
     <div>
-        <b-card title="Result">
-            <b-row class="mt-2 mb-2">
+        <b-card title="Result" :class="{'d-none':show}">
+            <div v-if="loading" class="d-flex align-items-center justify-content-center text-primary my-2" style="height: 850px;flex-direction:column;">
+                <b-spinner style="width: 6rem; height: 6rem;" class="mb-6" variant="primary"></b-spinner>
+                <strong style="font-size:x-large;">Loading...</strong>
+            </div>
+            <b-row v-else class="mt-2 mb-2">
                 <b-col cols="12">
                     <b-row class="m-2">
                         <b-col cols="12" class="mt-2 mb-2">
                             <b-card>
-                                <h5>Emotions</h5>
-                                <hr>
-                                <div class="d-flex text-center mb-4">
-                                    <div class="block block-emotion" v-for="item in result" :key="item">
-                                        <img :src="'../reaction-icon/'+item+'.svg'" :alt="item">
-                                        <p class="text-in-block">{{ item }}</p>
+                                <div class="d-flex align-items-center">
+                                    <h5 class="ml-1">Emotions:</h5>
+                                    <div class="d-flex text-center">
+                                        <div class="block">
+                                            <p style="margin:0.5rem !important" class="text-in-block">{{ emotionText }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <h5 class="mb-2">The meaning of the predicted mood</h5>
                                 <hr>
-                                <div class="d-flex text-center mb-4">
-                                    <div class="block">
-                                        <p style="margin:0.5rem !important" class="text-in-block">{{ emotionText }}</p>
+                                <div class="d-flex text-center mb-4 justify-content-center">
+                                    <div id="first-class" :class="['block-emotion',result[0]]">
+                                        <img :src="'../reaction-icon/'+result[0]+'.svg'" :alt="result[0]" style="width: 100px;height: 100px;margin: 0.5rem;">
+                                        <p class="text-in-block">{{ result[0] }}</p>
+                                    </div>
+                                    <div id="second-class" :class="['block-emotion',result[1]]">
+                                        <img :src="'../reaction-icon/'+result[1]+'.svg'" :alt="result[1]" style="width: 70px;height: 70px;margin: 0.5rem;">
+                                        <p class="text-in-block">{{ result[1] }}</p>
                                     </div>
                                 </div>
+                                <!-- <h5 class="mb-2">The meaning of the predicted mood</h5>
+                                <hr> -->
                             </b-card>
                         </b-col>
                         <b-col cols="12">
@@ -35,6 +45,10 @@
 
 <script>
 export default {
+    props: [
+        'show',
+        'loading'
+    ],
     name: "resultPredict",
     data() {
         return {
@@ -72,7 +86,7 @@ export default {
             },
             series: [{
                 name: 'series-1',
-                data: [45, 50, 49, 60, 70, 91]
+                data: [91, 70, 49, 60, 50, 45]
             }],
             result: ['like','love'],
             emotionText: 'Generally wholesome post'
@@ -83,7 +97,7 @@ export default {
 
 <style scoped>
 .block{
-    border: 1px solid #ccc!important;
+    border: 1px solid #ccc !important;
     border-radius: 10px;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
@@ -93,11 +107,7 @@ export default {
     align-items: center;
     width: 150px;
     justify-content: center;
-}
-img{
-    width: 50px;
-    height: 50px;
-    margin: 0.5rem;
+    flex-direction: column;
 }
 .text-in-block{
     font-size:x-large;

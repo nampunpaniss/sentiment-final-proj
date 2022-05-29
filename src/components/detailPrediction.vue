@@ -7,9 +7,13 @@
                     <apexChart type="bar" :options="options" :series="[{name:'value',data:detail.scoreClass}]" class="mb-4"></apexChart>
                     <h4 class="mb-4">This post expresses emotions</h4>
                     <div class="d-flex text-center mb-4">
-                        <div class="block block-emotion" v-for="(item,index) in detail.classPredict" :key="index">
-                            <img :src="'../reaction-icon/'+item+'.svg'" :alt="item">
-                            <p class="text-in-block">{{ item }}</p>
+                        <div class="block-emotion">
+                            <img :src="'../reaction-icon/'+detail.classPredict[0]+'.svg'" :alt="detail.classPredict[0]" style="width: 80px;height: 80px;margin: 0.5rem;">
+                            <p class="text-in-block">{{ detail.classPredict[0] }}</p>
+                        </div>
+                        <div class="block-emotion">
+                            <img :src="'../reaction-icon/'+detail.classPredict[1]+'.svg'" :alt="detail.classPredict[1]" style="width: 50px;height: 50px;margin: 0.5rem;">
+                            <p class="text-in-block">{{ detail.classPredict[1] }}</p>
                         </div>
                     </div>
                 </b-card>
@@ -19,11 +23,11 @@
                     <h4>Emotion</h4>
                     <div class="d-flex text-center mb-4">
                         <div class="block">
-                            <p style="margin:0.5rem !important" class="text-in-block">{{ detail.emotion }}</p>
+                            <p style="margin:0.5rem !important" class="text-in-block">{{ idPost.emotion }}</p>
                         </div>
                     </div>
                     <b-card>
-                        <p>{{ detail.text }}</p>
+                        <p>{{ idPost.text }}</p>
                     </b-card>
                     <p class="text-muted mb-4">Predicted on: {{ detail.startPredict | moment('MMMM DD, YYYY [at] h:mm:ss a') }}</p>
                 </b-card>
@@ -35,6 +39,9 @@
 <script>
 export default {
     name: 'detailPrediction',
+    props: [
+        'idPost'
+    ],
     data (){
         return {
             detail: {
@@ -89,11 +96,7 @@ export default {
     align-items: center;
     width: 150px;
     justify-content: center;
-}
-img{
-    width: 50px;
-    height: 50px;
-    margin: 0.5rem;
+    flex-direction: column;
 }
 .text-in-block{
     font-size:x-large;

@@ -5,7 +5,7 @@
             <h6>Emotion: {{ item.emotion }}</h6>
             <p>{{ item.text }}</p>
             <div class="text-end">
-                <p class="see-more" @click="goToDetail">See more</p>
+                <p class="see-more" @click="goToDetail(item)">See more</p>
             </div>
         </div>
       </div>
@@ -14,10 +14,10 @@
         pills 
         :total-rows="listItems.length"
         :per-page="perPage"
-        class="justify-content-center mt-4 mb-4"
+        class="justify-content-center mt-2 mb-1"
       ></b-pagination>
       <b-modal id="detail-prediction" size="xl" scrollable hide-footer>
-          <DetailPrediction></DetailPrediction>
+          <DetailPrediction :idPost="clickedPost"></DetailPrediction>
       </b-modal>
   </div>
 </template>
@@ -32,7 +32,8 @@ export default {
     data() {
         return {
             currentPage: 1,
-            perPage: 5,
+            perPage: 9,
+            clickedPost: null,
             listItems: [
                 {
                     emotion: 'Generally wholesome post 0',
@@ -105,7 +106,8 @@ export default {
         }
     },
     methods: {
-        goToDetail() {
+        goToDetail(post) {
+            this.clickedPost = post
             this.$bvModal.show('detail-prediction')
         }
     }
@@ -120,12 +122,12 @@ export default {
     margin-right: 0.5rem;
 }
 .see-more{
-    color: gold;
+    color: blue;
     cursor: pointer;
     display: inline;
 }
 .see-more:hover{
-    color: goldenrod;
+    color: darkblue;
     text-decoration: underline;
 }
 </style>
