@@ -68,6 +68,19 @@ export default {
                     bar: {
                         columnWidth: '50%',
                         distributed: true,
+                        dataLabels: {
+                            position: 'top',
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%";
+                    },
+                    offsetY: -20,
+                    style: {
+                        colors: ["#304758"]
                     }
                 },
                 fill: {
@@ -84,6 +97,11 @@ export default {
                     max: 100,
                     title: {
                         text: 'Prediction (%)'
+                    },
+                    labels: {
+                        formatter: function (val) {
+                            return val + "%";
+                        }
                     }
                 },
             },

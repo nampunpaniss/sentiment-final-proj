@@ -3,7 +3,7 @@
       <div class="block mt-2 mb-2" v-for="(item,index) in listShowData" :key="index">
         <div class="m-3">
             <h6 style="font-weight: bolder;">Emotion: {{ item.purport }}</h6>
-            <p style="text-align: justify;">{{ item.text | truncateText(200, '...') }}</p>
+            <p style="text-align: justify; height: 119px;">{{ item.text | truncateText(200, '...') }}</p>
             <div class="text-end">
                 <p class="see-more" @click="goToDetail(item.id)">See more</p>
             </div>
@@ -34,7 +34,7 @@ export default {
     data() {
         return {
             currentPage: 1,
-            perPage: 6,
+            perPage: 5,
             clickedPost: null
         }
     },
@@ -77,6 +77,7 @@ export default {
     border-radius: 5px;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    min-height: 222px;
 }
 .see-more{
     color: blue;

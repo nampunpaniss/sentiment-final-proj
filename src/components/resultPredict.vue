@@ -7,8 +7,8 @@
             </div>
             <b-row v-else class="mt-2 mb-2">
                 <b-col cols="12">
-                    <b-row class="m-2">
-                        <b-col v-if="resultPredict" cols="12" class="mt-2 mb-2">
+                    <b-row v-if="resultPredict" class="m-2">
+                        <b-col cols="12" class="mt-2 mb-2">
                             <b-card>
                                 <div class="d-flex align-items-center">
                                     <h5 class="ml-1">Emotions:</h5>
@@ -39,7 +39,7 @@
                                 <hr> -->
                             </b-card>
                         </b-col>
-                        <b-col cols="12" v-if="resultPredict">
+                        <b-col cols="12">
                             <apexChart type="bar" :options="options" :series="[{name: 'value',data: getComputeScore}],"></apexChart>
                         </b-col>
                     </b-row>
@@ -71,6 +71,19 @@ export default {
                     bar: {
                         columnWidth: '50%',
                         distributed: true,
+                        dataLabels: {
+                            position: 'top',
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%";
+                    },
+                    offsetY: -20,
+                    style: {
+                        colors: ["#304758"]
                     }
                 },
                 fill: {
@@ -87,6 +100,11 @@ export default {
                     max: 100,
                     title: {
                         text: 'Prediction (%)'
+                    },
+                    labels: {
+                        formatter: function (val) {
+                            return val + "%";
+                        }
                     }
                 },
             }

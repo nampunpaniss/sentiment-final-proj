@@ -74,7 +74,7 @@ export default {
     ...mapGetters([getterTypes.RESULT_PREDICTION]),
     state() {
       if(this.textPost){
-        return this.textPost.length >= 10 && this.textPost.length <= 5000
+        return this.textPost.length >= 1 && this.textPost.length <= 5000
       }
       return null
     },
@@ -92,7 +92,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([actionTypes.PREDICT_POST]),
+    ...mapActions([actionTypes.PREDICT_POST,actionTypes.FETCH_HISTORY_PREDICTIONS]),
     resetText(){
       this.textPost = null
       this.resultPredict = null
@@ -104,6 +104,7 @@ export default {
         this.predictPost(this.textPost).then(()=>{
           this.resultPredict = this.resultPrediction
           setTimeout(() => {
+            this.fetchHistoryPredictions()
             this.predicting = false
             this.loadingResult = false
           }, 2000);

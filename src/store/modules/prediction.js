@@ -23,7 +23,10 @@ const actions = {
     async [actionTypes.FETCH_HISTORY_PREDICTIONS]({ commit }) {
         return new Promise((resolve, reject) => {
             axios.get("/sentiment")
-            .then((resp) => {
+            .then((resp) => {      
+                resp.data.sort(function (a,b) {
+                    return new Date(b.p_date) - new Date(a.p_date)
+                })         
                 commit(mutationTypes.SET_HISTORY_PREDICTIONS, resp.data)
                 resolve(resp)
             })
