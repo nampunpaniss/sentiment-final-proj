@@ -10,7 +10,7 @@ body {
     width: 100%;
     height: 100%;
     background-attachment: fixed;
-    background-color: #E4E6EF !important;
+    background-color: #EEF0F8 !important;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
